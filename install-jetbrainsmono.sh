@@ -39,7 +39,7 @@ ZIP_URL=$(jq -r '.assets | map(select(.name|match("JetBrainsMono.*\\.zip")))[0] 
 # download & install
 ZIP_FILENAME=${ZIP_URL##*/}
 if ! curl "${CURLOPTS[@]}" --progress-bar --remote-name --output-dir "$ODIR" "${ZIP_URL}"; then
-  die "error downloading ${ZIP_FILENAME}"
+  _die "error downloading ${ZIP_FILENAME}"
 fi
 unzip -qo "${ODIR}/${ZIP_FILENAME}" 'fonts/ttf/*' -d "${ODIR}/jetbrains"
 find "${ODIR}/jetbrains/fonts/ttf" -name "*.ttf" -exec cp {} ~/Library/Fonts \;
