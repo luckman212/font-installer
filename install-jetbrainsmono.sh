@@ -33,17 +33,15 @@ LATEST_TAG=$(jq -r .tag_name <<<"$JSON")
 [[ $LATEST_TAG =~ ([0-9.-]+) ]] && LATEST_VER=${BASH_REMATCH[1]}
 [[ -n $LATEST_VER ]] || _die "error parsing latest release tag from GitHub"
 [[ ${LATEST_VER} == "${CUR_VER}" ]] && _die "version ${CUR_VER} already installed" 0
-ZIP_URLS=$(jq -r '.assets[] | select(.name|match("JetBrainsMono.*\\.zip")) | .browser_download_url' <<<"$JSON")
-[[ -n $ZIP_URLS ]] || _die "error obtaining downloadable assets"
+ZIP_URL=$(jq -r '.assets | map(select(.name|match("JetBrainsMono.*\\.zip")))[0] | .browser_download_url' <<<"$JSON")
+[[ -n $ZIP_URL ]] || _die "error obtaining asset URL"
 
-# download
-while read -r ZIP_URL; do
-  ZIP_FILENAME=${ZIP_URL##*/}
-  if ! curl "${CURLOPTS[@]}" --progress-bar --remote-name --output-dir "$ODIR" "${ZIP_URL}"; then
-    die "error downloading ${ZIP_FILENAME}"
-  fi
-  unzip -qo "${ODIR}/${ZIP_FILENAME}" 'fonts/ttf/*' -d "${ODIR}/jetbrains"
-  find "${ODIR}/jetbrains/fonts/ttf" -name "*.ttf" -exec cp {} ~/Library/Fonts \;
-  rm "${ODIR}/${ZIP_FILENAME}" 2>/dev/null
-  rm -r "${ODIR}/jetbrains" 2>/dev/null
-done <<<"$ZIP_URLS"
+# download & install
+ZIP_FILENAME=${ZIP_URL##*/}
+if ! curl "${CURLOPTS[@]}" --progress-bar --remote-name --output-dir "$ODIR" "${ZIP_URL}"; then
+  die "error downloading ${ZIP_FILENAME}"
+fi
+unzip -qo "${ODIR}/${ZIP_FILENAME}" 'fonts/ttf/*' -d "${ODIR}/jetbrains"
+find "${ODIR}/jetbrains/fonts/ttf" -name "*.ttf" -exec cp {} ~/Library/Fonts \;
+rm "${ODIR}/${ZIP_FILENAME}" 2>/dev/null
+rm -r "${ODIR}/jetbrains" 2>/dev/null
