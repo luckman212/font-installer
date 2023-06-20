@@ -8,7 +8,6 @@ _die() {
 # satisfy prereqs
 if ! hash brew &>/dev/null; then
   _die "requires Homebrew, visit https://brew.sh for instructions"
-  exit 1
 fi
 if ! hash otfinfo &>/dev/null; then
   brew install --quiet lcdf-typetools
