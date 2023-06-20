@@ -16,6 +16,6 @@ In its current form, the script fetches the latest version of the JetBrains-Mono
 
 ## Notes
 
-- Requires [Homebrew](https://brew.sh) to be installed
+- Requires [Homebrew](https://brew.sh) to grab the 2 dependencies (`jq` to parse the GitHub API response and `otfinfo` to check the local font version info)
 - Feel free to modify as needed
 - Based on [this StackExchange post](https://apple.stackexchange.com/questions/460745/how-to-install-a-large-set-of-ttf-fonts)
