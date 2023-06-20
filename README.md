@@ -2,7 +2,7 @@
 
 # font-installer
 
-## What is this
+## What is this?
 
 A small shell script to automate font installation on macOS.
 
